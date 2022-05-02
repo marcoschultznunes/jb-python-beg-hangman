@@ -1,22 +1,29 @@
 import random
 from exceptions.letter_input_errors import LetterAlreadyGuessedError
 
+
 class Word:
     words = tuple(["python", "java", "swift", "javascript"])
-    word = words[random.randint(0, len(words) - 1)]
-    revealed_word = "-" * len(word)
 
-    @staticmethod
-    def reveal_letters(letter):
+    def __init__(self):
+        self.word = Word.words[random.randint(0, len(Word.words) - 1)]
+        self.revealed_word = "-" * len(self.word)
+        self.guessed_letters = set()
+
+    def reveal_letters(self, letter):
         found = False
 
-        for i, word_letter in enumerate(Word.word):
-            if letter == Word.revealed_word[i]:
-                raise LetterAlreadyGuessedError()
-            elif letter == word_letter:
-                revealed = list(Word.revealed_word)
+        if letter in self.guessed_letters:
+            print(self.guessed_letters)
+            raise LetterAlreadyGuessedError()
+
+        for i, word_letter in enumerate(self.word):
+            if letter == word_letter:
+                revealed = list(self.revealed_word)
                 revealed[i] = letter
-                Word.revealed_word = "".join(revealed)
+                self.revealed_word = "".join(revealed)
                 found = True
+
+        self.guessed_letters.add(letter)
 
         return found
